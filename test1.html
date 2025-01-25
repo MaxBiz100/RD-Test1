@@ -1,0 +1,76 @@
+<script>
+// Function to infer income bracket
+function guessIncomeBracket() {
+    const screenWidth = window.screen.width;
+    const screenHeight = window.screen.height;
+    const userAgent = navigator.userAgent.toLowerCase();
+    const deviceMemory = navigator.deviceMemory || 0; // Some devices support this
+
+    let incomeBracket = "Unknown";
+
+    // Determine based on screen resolution
+    const resolution = Math.max(screenWidth, screenHeight);
+
+    if (resolution <= 720) {
+        // Low-end devices
+        incomeBracket = "Low Income";
+    } else if (resolution <= 1080) {
+        // Mid-range devices
+        incomeBracket = "Mid-Low Income";
+    } else if (resolution <= 1440) {
+        // Popular mid-range or older high-end
+        incomeBracket = "Middle Income";
+    } else if (resolution <= 2160) {
+        // High-end modern devices
+        incomeBracket = "Upper-Middle Income";
+    } else {
+        // Premium devices (5K, 8K screens)
+        incomeBracket = "High Income";
+    }
+
+    // Additional checks based on user agent and device type
+    if (userAgent.includes("iphone")) {
+        if (userAgent.includes("pro")) {
+            incomeBracket = "High Income";
+        } else if (userAgent.includes("x") || userAgent.includes("11") || userAgent.includes("12")) {
+            incomeBracket = "Upper-Middle Income";
+        } else {
+            incomeBracket = "Middle Income";
+        }
+    } else if (userAgent.includes("android")) {
+        if (userAgent.includes("samsung") && userAgent.includes("ultra")) {
+            incomeBracket = "High Income";
+        } else if (deviceMemory > 4) {
+            incomeBracket = "Upper-Middle Income";
+        } else if (deviceMemory > 2) {
+            incomeBracket = "Middle Income";
+        } else {
+            incomeBracket = "Mid-Low Income";
+        }
+    } else if (userAgent.includes("mac")) {
+        if (userAgent.includes("macbook pro") || resolution > 2880) {
+            incomeBracket = "High Income";
+        } else {
+            incomeBracket = "Upper-Middle Income";
+        }
+    } else if (userAgent.includes("windows")) {
+        if (resolution > 2160) {
+            incomeBracket = "Upper-Middle Income";
+        } else {
+            incomeBracket = "Middle Income";
+        }
+    } else if (userAgent.includes("linux")) {
+        incomeBracket = "Upper-Middle Income";
+    }
+
+    // Output the guessed income bracket
+    return incomeBracket;
+}
+
+// Example usage
+document.addEventListener("DOMContentLoaded", () => {
+    const result = guessIncomeBracket();
+    console.log(`Guessed Income Bracket: ${result}`);
+    document.body.innerHTML = `<h1>Guessed Income Bracket: ${result}</h1>`;
+});
+</script>
